@@ -78,9 +78,6 @@ default:
   image: docker:20.10.22-git
   services:
     - docker:20.10.22-dind
-  tags:
-    - privileged
-    - amd64
   before_script:
     - echo -e "section_start:`date +%s`:setup_section[collapsed=true]\r\e[0K[docker-ros] Setup docker-ros"
     - apk add bash
@@ -125,7 +122,6 @@ dev-amd64:
 dev-arm64:
   stage: Build dev Images
   extends: .build
-  tags: [privileged, arm64]
   rules:
     - if: $PLATFORM =~ /.*arm64.*/ && $TARGET =~ /.*dev.*/
   variables:
@@ -153,7 +149,6 @@ run-amd64:
 run-arm64:
   stage: Build run Images
   extends: .build
-  tags: [privileged, arm64]
   needs:
     - job: dev-arm64
       optional: true
@@ -199,7 +194,6 @@ Test dev-amd64:
 Test dev-arm64:
   stage: Test ROS Industrial CI
   extends: .test
-  tags: [privileged, arm64]
   needs:
     - job: dev-arm64
   rules:
